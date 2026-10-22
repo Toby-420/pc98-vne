@@ -1,0 +1,296 @@
+text
+```
+` A strange signal arrives in the middle of the night.
+%BLACK
+/Violet
+$ Hello? Is anyone there?
+/Radio
+$ ...ksssshhh...
+/Violet
+$ Great. Either the radio is broken, or my house is haunted.
+_
+/Violet
+$ I should probably turn it off.
+?Turn off the radio|OFF&Listen closer|LISTEN
+
+@OFF
+%BLACK
+/Violet
+$ I reach over and twist the dial until the static disappears.
+$ For a moment, the room is completely silent.
+$ Then something knocks on my bedroom door.
+_
+/Violet
+$ ...I live alone.
+?Open the door|DOOR&Hide in the closet|CLOSET
+
+@DOOR
+%VIOLET1
+/Violet
+$ I slowly reach for the handle.
+$ The door swings open by itself.
+$ There's nobody in the hallway, but a small piece of paper rests on the floor.
+_
+/Violet
+$ It has my name written on it.
+$ Underneath, in handwriting that looks exactly like mine, are the words:
+$ "You shouldn't have turned it off."
+?Pick up the paper|PAPER&Leave it alone|IGNORE
+
+@PAPER
+%STARS
+/Violet
+$ I pick up the paper.
+$ The moment my fingers touch it, every light in the house goes out.
+$ Through the window, I see the night sky filled with stars.
+$ Too many stars.
+$ They seem to be moving, slowly arranging themselves into letters.
+_
+/Violet
+$ No. No, no, no.
+$ The stars spell out a single word.
+$ LISTEN.
+%RADIO
+$ From somewhere behind me, the radio switches itself back on.
+$ ...ksssshhh...
+/Radio
+$ Violet.
+_
+/Violet
+$ It knows my name.
+?Answer the voice|ANSWER&Run outside|RUN
+
+@ANSWER
+%BLACK
+/Violet
+$ Who are you?
+/Radio
+$ I am the part of you that stayed behind.
+_
+/Violet
+$ What does that even mean?
+/Radio
+$ You were never supposed to wake up.
+$ You were supposed to forget.
+$ But you heard the signal, and now the door is open.
+$ Look outside.
+%STARS
+/Violet
+$ The stars are gone.
+$ In their place is a vast, dark emptiness, stretching across the entire sky.
+$ Something enormous moves beyond the glass.
+$ I can hear it breathing.
+_
+/Violet
+$ What happens now?
+/Radio
+$ Now you choose which side of the door you want to be on.
+?Ask what is outside|OUTSIDE&Destroy the radio|DESTROY
+
+@OUTSIDE
+%VIOLET1
+/Violet
+$ I step toward the window.
+$ The thing outside stops moving.
+$ A pale hand presses against the glass.
+$ Then another.
+$ Then dozens more.
+$ They all look like my hands.
+_
+/Violet
+$ I understand now.
+$ The room, the radio, the stars. None of it is real.
+$ I'm not in my house.
+$ I'm inside something that's trying to remember what a house looks like.
+%BLACK
+/Radio
+$ And it remembers you.
+_
+/Violet
+$ I back away from the window, but the walls begin to fold inward.
+$ The radio emits one final burst of static.
+$ Then everything goes dark.
+!
+@DESTROY
+%RADIO
+/Violet
+$ I grab the radio and slam it against the floor.
+$ Plastic cracks. Metal scatters across the carpet.
+$ The static cuts off.
+$ For three seconds, nothing happens.
+_
+/Violet
+$ Then every broken piece begins to whisper.
+%BLACK
+/Radio
+$ You can break the receiver.
+$ You cannot break the signal.
+$ You can silence the voice.
+$ You cannot silence the thing listening through it.
+$ And you cannot destroy a door by smashing the key.
+_
+/Violet
+$ The floor opens beneath me.
+$ I fall through darkness, past fragments of rooms I recognize.
+$ My childhood bedroom.
+$ The school I used to attend.
+$ A street I have never visited, beneath a sky full of violet stars.
+%STARS
+/Violet
+$ I land on cold ground.
+$ Somewhere in the distance, a radio begins to play.
+$ I don't know how long I walk toward it.
+$ I only know that, eventually, I hear my own voice coming through the speakers.
+/Radio
+$ Hello? Is anyone there?
+!
+@LISTEN
+%RADIO
+/Violet
+$ I turn the dial a little farther.
+$ Beneath the static, there's a faint melody.
+$ I recognize it, though I can't remember where I've heard it before.
+$ Then a voice begins speaking in a language I don't understand.
+$ Somehow, I understand every word.
+/Radio
+$ The stars are not stars.
+$ The darkness is not empty.
+$ And you are not where you think you are.
+_
+/Violet
+$ I pull the radio closer.
+$ The voice sounds frightened.
+$ It sounds like me.
+?Ask who is speaking|VOICE&Change the frequency|FREQUENCY
+
+@VOICE
+%VIOLET1
+/Violet
+$ Who is this?
+/Radio
+$ You.
+$ From tomorrow.
+_
+/Violet
+$ That's impossible.
+/Radio
+$ I said the same thing.
+$ Listen carefully. At midnight, someone will knock on your door.
+$ Do not open it.
+$ No matter what it says, do not open it.
+$ Especially if it sounds like me.
+%BLACK
+/Violet
+$ The radio clicks off.
+$ I stare at the clock.
+$ 11:59 PM.
+$ A knock comes from the front door.
+_
+/Violet
+$ Then another.
+$ Then a familiar voice calls from the other side.
+/Radio
+$ Violet? It's me. Please let me in.
+?Open the door|DOOR&Stay silent|CLOSET
+
+@FREQUENCY
+%BLACK
+/Violet
+$ I spin the dial as quickly as I can.
+$ The melody disappears.
+$ Voices blur into static, then into a low, rhythmic pulse.
+$ Thump.
+$ Thump.
+$ Thump.
+_
+/Violet
+$ It's a heartbeat.
+$ I press my ear against the speaker.
+$ The heartbeat stops.
+$ My own heart stops with it.
+%STARS
+/Violet
+$ For one impossible moment, I see myself floating among the stars.
+$ I see a thousand versions of my house, each with a radio glowing in its window.
+$ In every house, someone is listening.
+$ In every house, someone is about to open a door.
+$ Then I hear a voice behind me.
+/Radio
+$ Finally. I've found you.
+?Turn around|TURN&Keep listening|VOICE
+
+@TURN
+%VIOLET1
+/Violet
+$ I turn around.
+$ Standing in the corner is a person wearing my face.
+$ They look exhausted.
+$ Their clothes are torn, their hands are trembling, and their eyes reflect a sky full of stars.
+_
+/Violet
+$ Who are you?
+/Radio
+$ I'm the version of you who made the wrong choice.
+$ And I've come to make sure you don't repeat it.
+$ There's only one way out.
+$ You have to stop the story before it reaches the end.
+%BLACK
+/Violet
+$ How?
+/Radio
+$ Find the first sound.
+$ Find the first word.
+$ Find the moment you decided to listen.
+$ Then do what I couldn't.
+?Return to the beginning|LISTEN&Refuse to help|REFUSE
+
+@REFUSE
+%BLACK
+/Violet
+$ I shake my head.
+$ I'm tired of voices, riddles, and impossible choices.
+$ I want my house back.
+$ I want the radio gone.
+$ I want to sleep.
+_
+/Violet
+$ So I close my eyes.
+$ When I open them, morning sunlight spills across my bedroom.
+$ The radio is gone.
+$ The door is closed.
+$ Everything seems normal.
+%STARS
+/Violet
+$ I make coffee. I get dressed. I go about my day.
+$ And for a while, I convince myself that it was all a dream.
+$ Until that evening, when I find a small piece of paper on my kitchen table.
+$ It has my name written on it.
+$ Underneath are the words:
+$ "Tomorrow, try listening."
+!
+@CLOSET
+%BLACK
+/Violet
+$ I run into the closet and pull the door shut.
+$ I crouch between winter coats and boxes of old belongings.
+$ Outside, footsteps cross the room.
+$ They stop directly in front of the closet.
+_
+/Violet
+$ A hand touches the other side of the door.
+$ Then a voice whispers.
+/Radio
+$ Violet, I know you're in there.
+$ I know because I'm in here too.
+%VIOLET1
+/Violet
+$ The closet door slowly swings open.
+$ There's no hallway beyond it.
+$ No bedroom.
+$ No house.
+$ Only another closet, with another frightened version of me hiding inside.
+$ She looks up at me.
+$ She opens her mouth to speak.
+$ And I hear my own voice coming from the radio behind her.
+!
+```

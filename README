@@ -1,0 +1,55 @@
+---- How to add assets ----
+Adding assets using the provided conversion tools is easy.
+
+-- Images --
+Before doing anything else, it is recommended to crop, scale, or initially design every image to be 4:3 aspect ratio, 640x400 pixels, with 16 colours. This means that the converter won't make assumptions that could make the images look strange. It can by all means convert other images, it is just better if you do it beforehand so you can iron out any artefacts.
+
+To convert images, simply use `./convert.bg [image folder]` and it'll tell you if any images didn't get converted.
+
+Since the colours of everything on screen is defined in the palette, make sure that the images you use have enough contrast between the brightest and darkest points, otherwise you won't be able to see anything. The way around this is that if your image is too dark (maybe a dungeon), add a single pixel of pure white and a single pixel of grey at the bottom (so it cannot be seen). This means the colour palette will contain enough colours of sufficient contrast.
+
+-- Fonts --
+The provided font is the Toshiba Satellite Bios font, but if this font doesn't fit your project, you can provide your own. Make sure the font is an 8px font in TTF format.
+
+To convert a font, simply use `./convert.font [font name]` and it shall convert it to the required format.
+
+-- Story --
+The story file is located at ASSETS/STORY.P98
+The engine reads the first character of each line to choose what to do and these are the options:
+` comment
+/ new speaker
+$ dialogue (add another $ to skip the waiting for user)
+# newline (within dialogue)
+@ story labels
+: jump/goto label
+? choices and results (action1|label1&action2|label2)
+% show image
+_ wait for user
+! end safely
+
+An example is as follows:
+
+%SUN
+/Alice
+$ Hello there!
+/Bob
+$$ I want a beer.
+%TREES
+?Go to the pub|PUB&Drink at home|HOME
+
+@PUB
+%PUB
+$ You have a good time at the pub
+!
+
+@HOME
+%HOME
+$ You die of loneliness. Don't drink alone.
+!
+
+
+This example shows the image SUN, makes Alice say  "Hello there!", waits for the user, makes Bob say "I want a beer", immediately shows the image TREES, then asks the user to go to the pub or drink at home. If they choose to drink at the pub, they are shown the picture of the pub and have a good time. The story ends there. If they chose to drink at home, they die and then the story ends.
+
+You can remove the ! at the end of a label statement and it will just carry through to the next processable statement.
+
+Dialogue can have up to 6 lines.

@@ -1,0 +1,9 @@
+system dos
+option quiet
+name engine.exe
+file dev/main.obj
+file dev/font.obj
+file dev/textbox.obj
+file dev/bg.obj
+file dev/story.obj
+library dev/GFX.LIB

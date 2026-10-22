@@ -1,0 +1,41 @@
+#!/bin/python3
+import sys
+from pathlib import Path
+from PIL import Image, ImageDraw, ImageFont
+
+font_path = sys.argv[1]
+out_path = Path("ASSETS/FONT8.FNT")
+
+# Use a small pixel font for the best retro appearance.
+font = ImageFont.truetype(font_path, 8)
+
+data = bytearray()
+
+for code in range(128):
+    ch = chr(code) if code >= 32 else " "
+
+    image = Image.new("L", (8, 8), 0)
+    draw = ImageDraw.Draw(image)
+
+    # Center the glyph inside its 8x8 cell.
+    bbox = draw.textbbox((0, 0), ch, font=font)
+    width = bbox[2] - bbox[0]
+    height = bbox[3] - bbox[1]
+
+    px = (8 - width) // 2 - bbox[0]
+    py = (8 - height) // 2 - bbox[1]
+
+    draw.text((px, py), ch, font=font, fill=255)
+
+    # Convert each row to an MSB-first bitmap.
+    for y in range(8):
+        bits = 0
+
+        for x in range(8):
+            if image.getpixel((x, y)) >= 128:
+                bits |= 0x80 >> x
+
+        data.append(bits)
+
+out_path.write_bytes(data)
+print(f"Wrote {out_path}: {len(data)} bytes")
