@@ -8,6 +8,7 @@
 #include "textbox.h"
 #include "bg.h"
 #include "story.h"
+#include "music.h"
 
 static int jump_to_label(FILE *storyFile, const char *target)
 {
@@ -44,6 +45,9 @@ int main(void)
     char line[256]; // Maximum dialogue length is ~200 char anyway
     char *jump_label;
     int auto_advance;
+    char current_bg[10];
+
+    music_init();
 
 
     if (!gfx_init(&gfx, GFX_MODE_640x400x16))
@@ -78,15 +82,31 @@ int main(void)
                 break;
             case '$':
                 auto_advance = (line[1] == '$');
-                // pointer arith. to remove first char
+
                 textbox_set_text(line + 1);
-                textbox_show(&gfx);
+
+                /* Ensure both pages contain the textbox. */
+                textbox_redraw_both_pages(&gfx);
+
+                /* Display the completed rendering page. */
                 gfx_wait_vsync(&gfx);
-                gfx_swap_planes(&gfx);
-                if (!auto_advance) getch();
-                break;
+
+                /* Only swap if rendering and display are different. */
+                if (gfx_get_plane(&gfx, GFX_PLANE_RENDERING) !=
+                    gfx_get_plane(&gfx, GFX_PLANE_DISPLAY))
+                {
+                    gfx_swap_planes(&gfx);
+                }
+
+                if (!auto_advance)
+                    getch();
+
+            break;
             case '%':
-                prepare_background_pages(&gfx, line + 1);
+                strncpy(current_bg, line + 1, sizeof(current_bg) - 1);
+                current_bg[sizeof(current_bg) - 1] = '\0';
+
+                prepare_background_pages(&gfx, current_bg);
                 gfx_swap_planes(&gfx);
                 break;
             case '/':
@@ -105,6 +125,9 @@ int main(void)
 
                 textbox_show(&gfx);
                 gfx_wait_vsync(&gfx);
+                gfx_swap_planes(&gfx);
+
+                prepare_background_pages(&gfx, current_bg);
                 gfx_swap_planes(&gfx);
 
                 if (jump_label != NULL)
@@ -128,12 +151,17 @@ int main(void)
             case '`':
                 // Ignore comments distinctly
                 break;
+            case '~':
+                if (line[1] == '!') music_stop();
+                else music_play(line + 1);
+                break;
             default:
                 break;
         }
     }
 
     shutdown_seq:
+        music_shutdown();
         gfx_fini(&gfx);
 
     return 0;

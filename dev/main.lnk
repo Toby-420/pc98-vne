@@ -6,4 +6,6 @@ file dev/font.obj
 file dev/textbox.obj
 file dev/bg.obj
 file dev/story.obj
+file dev/music.obj
 library dev/GFX.LIB
+

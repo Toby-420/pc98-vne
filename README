@@ -1,3 +1,9 @@
+TODO-----
+Add SFX
+fade between scenes/music
+switch to MAG image format
+
+
 ---- How to add assets ----
 Adding assets using the provided conversion tools is easy.
 
@@ -25,6 +31,7 @@ $ dialogue (add another $ to skip the waiting for user)
 ? choices and results (action1|label1&action2|label2)
 % show image
 _ wait for user
+~ play music
 ! end safely
 
 An example is as follows:

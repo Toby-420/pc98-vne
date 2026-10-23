@@ -4,9 +4,11 @@ wcc -q -2 -bt=dos  -ecf src/font.c      -fo=dev/font.obj
 wcc -q -2 -bt=dos  -ecf src/textbox.c   -fo=dev/textbox.obj
 wcc -q -2 -bt=dos  -ecf src/bg.c        -fo=dev/bg.obj
 wcc -q -2 -bt=dos  -ecf src/story.c        -fo=dev/story.obj
+wcc -q -2 -bt=dos  -ecf src/music.c     -fo=dev/music.obj
 wlink @dev/main.lnk
 mkdir -p release
 rm -r release/*
 cp -r ASSETS release/
+cp run-tools/* release/
 cp engine.exe release/
 

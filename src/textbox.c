@@ -41,33 +41,25 @@ static char speaker[SPEAKER_MAX + 1] = "";
 static char dialogue[TEXT_MAX + 1] = "";
 
 
-static void textbox_redraw_both_pages(gfx_state_t *gfx)
+void textbox_redraw_both_pages(gfx_state_t *gfx)
 {
     int display;
     int rendering;
-    int hidden;
 
     display = gfx_get_plane(gfx, GFX_PLANE_DISPLAY);
     rendering = gfx_get_plane(gfx, GFX_PLANE_RENDERING);
-    hidden = 1 - display;
 
-    /* Draw the dialogue on the hidden page first. */
-    gfx_set_plane(gfx, GFX_PLANE_RENDERING, hidden);
+    /* Draw on page 0. */
+    gfx_set_plane(gfx, GFX_PLANE_RENDERING, 0);
     textbox_show(gfx);
 
-    /* Switch to the completed page at vertical retrace. */
-    gfx_wait_vsync(gfx);
-    gfx_set_plane(gfx, GFX_PLANE_DISPLAY, hidden);
-
-    /* Redraw the old page while it is hidden. */
-    gfx_set_plane(gfx, GFX_PLANE_RENDERING, display);
+    /* Draw on page 1. */
+    gfx_set_plane(gfx, GFX_PLANE_RENDERING, 1);
     textbox_show(gfx);
 
-    /* Restore the normal rendering page. */
+    /* Restore the original rendering plane. */
     gfx_set_plane(gfx, GFX_PLANE_RENDERING, rendering);
 }
-
-
 
 void textbox_set_speaker(const char *text)
 {
@@ -184,15 +176,13 @@ int menu_show(gfx_state_t *gfx, char *options[], int count)
     if (count <= 0)
         return -1;
 
-    /* Keep the menu inside the screen. */
+    // Keep the menu inside the screen
     if (MENU_Y + count * MENU_SPACING > gfx->height)
         return -1;
 
-    textbox_show(gfx);
-
     while (1)
     {
-        /* Draw on the current rendering page. */
+        // Draw on the current rendering page.
         gfx_draw_rectangle(gfx, MENU_X - 20, MENU_Y - 8,
                        MENU_X + MENU_WIDTH,
                        MENU_Y + count * MENU_SPACING, COLOR_BG);
