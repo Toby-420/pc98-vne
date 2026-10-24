@@ -20,7 +20,7 @@ The provided font is the Toshiba Satellite Bios font, but if this font doesn't f
 To convert a font, simply use `./convert.font [font name]` and it shall convert it to the required format.
 
 -- Story --
-The story file is located at ASSETS/STORY.P98
+The master story file is located at ASSETS/STORY.P98
 The engine reads the first character of each line to choose what to do and these are the options:
 ` comment
 / new speaker
@@ -31,8 +31,12 @@ $ dialogue (add another $ to skip the waiting for user)
 ? choices and results (action1|label1&action2|label2)
 % show image
 _ wait for user
-~ play music
+~ play music (~! stops music)
+* load new story file
 ! end safely
+
+Note that any arguments such as those given to % or * do not require file extensions.
+    Just provide the filename and it will load it.
 
 An example is as follows:
 

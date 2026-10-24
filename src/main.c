@@ -45,7 +45,7 @@ int main(void)
     char line[256]; // Maximum dialogue length is ~200 char anyway
     char *jump_label;
     int auto_advance;
-    char current_bg[10];
+    char current_bg[10], current_story[10];
 
     music_init();
 
@@ -109,6 +109,16 @@ int main(void)
                 prepare_background_pages(&gfx, current_bg);
                 gfx_swap_planes(&gfx);
                 break;
+            case '*':
+                sprintf(current_story, "ASSETS/%s.P98", line + 1);
+
+                storyFile = fopen(current_story, "r");
+                if (storyFile == NULL)
+                {
+                    printf("Could not load story %s\n", current_story);
+                    goto shutdown_seq;
+                }
+                break;
             case '/':
                 textbox_set_speaker(line + 1);
                 break;
@@ -125,11 +135,8 @@ int main(void)
 
                 textbox_show(&gfx);
                 gfx_wait_vsync(&gfx);
-                gfx_swap_planes(&gfx);
 
                 prepare_background_pages(&gfx, current_bg);
-                gfx_swap_planes(&gfx);
-
                 if (jump_label != NULL)
                 {
                     if (!jump_to_label(storyFile, jump_label))
@@ -161,6 +168,7 @@ int main(void)
     }
 
     shutdown_seq:
+        prepare_background_pages(&gfx, "BLACK");
         music_shutdown();
         gfx_fini(&gfx);
 

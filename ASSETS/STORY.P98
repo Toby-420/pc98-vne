@@ -1,19 +1,11 @@
 ` Start menu
-%TITLE
+%RADIO
 ~MACR_01
-?Start Game|START&Quit to DOS|END
+?Start Game|START&Quit to DOS|END&NEW|END
 
 @START
-~!
-~GALLFOR1
-$ You have started the game.
-$ We are going to stop the music soon.
-~!
-$ The music is over
-~GALLFOR1
-$ sdf
-
-!
+$ sfgiudfgud
+*NEWSTOR
 
 @END
 !
