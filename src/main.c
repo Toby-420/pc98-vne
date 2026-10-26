@@ -72,9 +72,6 @@ int main(void)
         goto shutdown_seq;
     }
 
-    gfx_wait_vsync(&gfx);
-    gfx_swap_planes(&gfx);
-
     while (fgets(line, sizeof(line), storyFile) != NULL)
     {
         line[strcspn(line, "\r\n")] = '\0';
