@@ -10,6 +10,8 @@
 #include "story.h"
 #include "music.h"
 
+#define MASTER_STORY "ASSETS/MASTER.P98"
+
 static int jump_to_label(FILE *storyFile, const char *target)
 {
     char buf[256];
@@ -45,7 +47,8 @@ int main(void)
     char line[256]; // Maximum dialogue length is ~200 char anyway
     char *jump_label;
     int auto_advance;
-    char current_bg[10], current_story[10];
+    char current_bg[10], current_story[10], prev_story[10];
+    long prev_pos;
 
     music_init();
 
@@ -62,7 +65,7 @@ int main(void)
         goto shutdown_seq;
     }
 
-    storyFile = fopen("ASSETS/STORY.P98", "r");
+    storyFile = fopen(MASTER_STORY, "r");
     if (storyFile == NULL)
     {
         printf("Could not load story\n");
@@ -110,9 +113,21 @@ int main(void)
                 gfx_swap_planes(&gfx);
                 break;
             case '*':
-                sprintf(current_story, "ASSETS/%s.P98", line + 1);
 
-                storyFile = fopen(current_story, "r");
+                if (line[1] == '*')
+                {
+                    sprintf(current_story, MASTER_STORY);
+                    storyFile = fopen(current_story, "r");
+                    fseek(storyFile, prev_pos, SEEK_SET);
+                } else
+                {
+                    prev_pos = ftell(storyFile);
+                    sprintf(prev_story, current_story);
+                    sprintf(current_story, "ASSETS/%s.P98", line + 1);
+                    storyFile = fopen(current_story, "r");
+                }
+
+
                 if (storyFile == NULL)
                 {
                     printf("Could not load story %s\n", current_story);

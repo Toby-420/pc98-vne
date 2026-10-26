@@ -32,7 +32,7 @@ $ dialogue (add another $ to skip the waiting for user)
 % show image
 _ wait for user
 ~ play music (~! stops music)
-* load new story file
+* load new story file (** returns to master where you left off)
 ! end safely
 
 Note that any arguments such as those given to % or * do not require file extensions.
