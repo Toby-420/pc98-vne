@@ -3,6 +3,20 @@ Add SFX
 fade between scenes/music
 switch to MAG image format
 
+---- Compilation ----
+You will need openwatcom (the package openwatcom-v2 in the AUR for arch-based distros).
+The following need to be set in the working terminal for an x86_64 machine:
+
+export WATCOM=/opt/watcom
+export PATH="$WATCOM/binl64:$PATH"
+export EDPATH="$WATCOM/eddat"
+export WIPFC="$WATCOM/wipfc"
+export INCLUDE="$WATCOM/h"
+
+Then, just run 'cm' to compile.
+
+This moves all assets and compiled data into release/ where you can run AUTOEXEC.BAT in a
+    pc98 environment to initialise everything necessary.
 
 ---- How to add assets ----
 Adding assets using the provided conversion tools is easy.

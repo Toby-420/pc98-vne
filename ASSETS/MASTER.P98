@@ -1,7 +1,7 @@
 ` Start menu
 %RADIO
 ~MACR_01
-?Start Game|START&Quit to DOS|END&NEW|END
+?Start Game|START&Quit to DOS|END
 
 @START
 $ sfgiudfgud
