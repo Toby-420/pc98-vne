@@ -51,7 +51,11 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# custom
 release/
 ASSETS/
 bgs/
 story-plan
+ABAK/
+RTBAK/
+*.7z
