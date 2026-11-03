@@ -10,7 +10,7 @@
 #include "story.h"
 #include "music.h"
 
-#define MASTER_STORY "ASSETS/MASTER.P98"
+#define MASTER_STORY "ASSETS/MASTER.EST"
 
 int seek_line(FILE *file, long line_number)
 {
@@ -154,7 +154,7 @@ int main(void)
                     sprintf(prev_story, current_story);
 
 
-                    sprintf(current_story, "ASSETS/%s.P98",
+                    sprintf(current_story, "ASSETS/%s.EST",
                                         strtok(line + 2, ":"));
 
                     jump_pos = atol(strtok(NULL, ":"));
@@ -173,7 +173,7 @@ int main(void)
                 {
                     prev_pos = ftell(storyFile);
                     sprintf(prev_story, current_story);
-                    sprintf(current_story, "ASSETS/%s.P98", line + 1);
+                    sprintf(current_story, "ASSETS/%s.EST", line + 1);
                     fclose(storyFile);
                     storyFile = fopen(current_story, "r");
 
