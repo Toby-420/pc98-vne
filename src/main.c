@@ -12,11 +12,30 @@
 
 #define MASTER_STORY "ASSETS/MASTER.P98"
 
+int seek_line(FILE *file, long line_number)
+{
+    long current_line;
+    int ch;
+
+    if (line_number < 1) return 0;
+
+    rewind(file);
+
+    for (current_line = 1; current_line < line_number; current_line++)
+    {
+        while ((ch = fgetc(file)) != '\n')
+        {
+            if (ch == EOF) return 0;
+        }
+    }
+
+    return 1;
+}
+
 static int jump_to_label(FILE *storyFile, const char *target)
 {
     char buf[256];
-    long original_pos;
-    long label_pos;
+    long original_pos, label_pos;
 
     original_pos = ftell(storyFile);
     rewind(storyFile);
@@ -46,9 +65,9 @@ int main(void)
     FILE *storyFile;
     char line[256]; // Maximum dialogue length is ~200 char anyway
     char *jump_label;
-    int auto_advance;
+    int auto_advance, typewrite_delay = 0;
     char current_bg[10], current_story[10], prev_story[10];
-    long prev_pos;
+    long prev_pos, jump_pos;
 
     music_init();
 
@@ -86,7 +105,7 @@ int main(void)
                 textbox_set_text(line + 1);
 
                 /* Ensure both pages contain the textbox. */
-                textbox_redraw_both_pages(&gfx);
+                textbox_redraw_both_pages(&gfx, typewrite_delay);
 
                 /* Display the completed rendering page. */
                 gfx_wait_vsync(&gfx);
@@ -98,8 +117,7 @@ int main(void)
                     gfx_swap_planes(&gfx);
                 }
 
-                if (!auto_advance)
-                    getch();
+                if (!auto_advance) getch();
 
             break;
             case '%':
@@ -109,21 +127,58 @@ int main(void)
                 prepare_background_pages(&gfx, current_bg);
                 gfx_swap_planes(&gfx);
                 break;
+            // case '&':
+            //     strcpy(save_name, line + 2);
+            //     if (line[1] == 'S')
+            //     {
+            //         saveFile = fopen(save_name, "w");
+            //
+            //     } else if (line[1] == 'L')
+            //     {
+            //         saveFile = fopen(save_name, "w");
+            //     }
+            //     break;
             case '*':
-
                 if (line[1] == '*')
                 {
                     sprintf(current_story, MASTER_STORY);
+                    fclose(storyFile);
                     storyFile = fopen(current_story, "r");
+
+                    if (storyFile == NULL) break;
+
                     fseek(storyFile, prev_pos, SEEK_SET);
+                } else if (line[1] == '@')
+                {
+                    prev_pos = ftell(storyFile);
+                    sprintf(prev_story, current_story);
+
+
+                    sprintf(current_story, "ASSETS/%s.P98",
+                                        strtok(line + 2, ":"));
+
+                    jump_pos = atol(strtok(NULL, ":"));
+
+                    fclose(storyFile);
+                    storyFile = fopen(current_story, "r");
+
+                    if (storyFile == NULL) break;
+
+                    if (!seek_line(storyFile, jump_pos))
+                    {
+                        printf("Invalid line number: %ld\n", jump_pos);
+                        break;
+                    }
                 } else
                 {
                     prev_pos = ftell(storyFile);
                     sprintf(prev_story, current_story);
                     sprintf(current_story, "ASSETS/%s.P98", line + 1);
+                    fclose(storyFile);
                     storyFile = fopen(current_story, "r");
-                }
 
+                    if (storyFile == NULL) break;
+                }
 
                 if (storyFile == NULL)
                 {
@@ -142,10 +197,18 @@ int main(void)
                            jump_label);
                 }
                 break;
+            case ';':
+                if (line + 1 != NULL) {
+                    typewrite_delay = atoi(line + 1);
+                } else
+                {
+                    typewrite_delay = 0;
+                }
+                break;
             case '?':
                 jump_label = handle_choice(&gfx, line + 1);
 
-                textbox_show(&gfx);
+                textbox_show(&gfx, typewrite_delay);
                 gfx_wait_vsync(&gfx);
 
                 prepare_background_pages(&gfx, current_bg);

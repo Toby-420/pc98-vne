@@ -4,7 +4,8 @@ fade between scenes/music
 switch to MAG image format
 
 ---- Compilation ----
-You will need openwatcom (the package openwatcom-v2 in the AUR for arch-based distros).
+You will need openwatcom and python3.
+Instructions are for Linux-based operating systems.
 The following need to be set in the working terminal for an x86_64 machine:
 
 export WATCOM=/opt/watcom
@@ -15,50 +16,87 @@ export INCLUDE="$WATCOM/h"
 
 Then, just run 'cm' to compile.
 
-This moves all assets and compiled data into release/ where you can run AUTOEXEC.BAT in a
-    pc98 environment to initialise everything necessary.
+This moves all assets and compiled data into release/ where you can run
+    AUTOEXEC.BAT in a pc98 environment to initialise everything necessary.
 
 ---- How to add assets ----
 Adding assets using the provided conversion tools is easy.
 
 -- Images --
-Before doing anything else, it is recommended to crop, scale, or initially design every image to be 4:3 aspect ratio, 640x400 pixels, with 16 colours. This means that the converter won't make assumptions that could make the images look strange. It can by all means convert other images, it is just better if you do it beforehand so you can iron out any artefacts.
+Before doing anything else, it is recommended to crop, scale, or initially
+    design every image to be 4:3 aspect ratio, 640x400 pixels, with 16 colours.
+    This means that the converter won't make assumptions that could make the
+    images look strange. It can by all means convert other images, it is just
+    better if you do it beforehand so you can iron out any artefacts.
 
-To convert images, simply use `./convert.bg [image folder]` and it'll tell you if any images didn't get converted.
+To convert images, simply use `./convert.bg [image folder]` and it'll tell you
+    if any images didn't get converted.
 
-Since the colours of everything on screen is defined in the palette, make sure that the images you use have enough contrast between the brightest and darkest points, otherwise you won't be able to see anything. The way around this is that if your image is too dark (maybe a dungeon), add a single pixel of pure white and a single pixel of grey at the bottom (so it cannot be seen). This means the colour palette will contain enough colours of sufficient contrast.
+Since the colours of everything on screen is defined in the palette, make sure
+    that the images you use have enough contrast between the brightest and
+    darkest points, otherwise you won't be able to see anything. The way around
+    this is that if your image is too dark (maybe a dungeon), add a single
+    pixel of pure white and a single pixel of grey at the bottom (so it cannot
+    be seen). This means the colour palette will contain enough colours of
+    sufficient contrast.
 
 -- Fonts --
-The provided font is the Toshiba Satellite Bios font, but if this font doesn't fit your project, you can provide your own. Make sure the font is an 8px font in TTF format.
+The provided font is the Toshiba Satellite Bios font, but if this font doesn't
+    fit your project, you can provide your own. Make sure the font is an 8px
+    font in TTF format.
 
-To convert a font, simply use `./convert.font [font name]` and it shall convert it to the required format.
+To convert a font, simply use `./convert.font [font name]` and it shall convert
+    it to the required format.
 
 -- Story --
 The master story file is located at ASSETS/STORY.P98
-The engine reads the first character of each line to choose what to do and these are the options:
+The engine reads the first character of each line to choose what to do and
+    these are the options:
+
 ` comment
 / new speaker
-$ dialogue (add another $ to skip the waiting for user)
-# newline (within dialogue)
-@ story labels
-: jump/goto label
-? choices and results (action1|label1&action2|label2)
+;NUM set typewriter delay to NUM milliseconds
+; turn typewriter mode off
+$ dialogue (wait for keypress)
+$$ dialogue (non-waiting)
+# newline (within dialogue statement)
+@ label definition
+: jump to label
+? user menu branch (action1|label1&action2|label2)
 % show image
-_ wait for user
-~ play music (~! stops music)
-* load new story file (** returns to master where you left off)
-! end safely
+_ wait for keypress
+~ play music
+~! stop music
+* load new story file
+** go back to prev story file (only 1 story deep)
+*@FILE:NUM load any story file at a line number
+! end branch/game
 
-Note that any arguments such as those given to % or * do not require file extensions.
-    Just provide the filename and it will load it.
+Note that any arguments such as those given to % or * do not require file
+    extensions. Just provide the filename and it will load it.
 
-An example is as follows:
+Once a statement is issued, that state will persist until a counter-statement
+    is issued. For example, % will display an image until another % is
+    encountered.
+
+If a ! is not found at the end of a branch, it will just carry through to the
+    next processable statement.
+
+Dialogue can be up to 6 lines on one page.
+
+A single line in the story file can be up to 256 characters long. The maximum
+    amount of dialogue able to be put on a single screen is around 200
+    characters.
+
+- Example -
 
 %SUN
 /Alice
 $ Hello there!
 /Bob
+;20
 $$ I want a beer.
+;
 %TREES
 ?Go to the pub|PUB&Drink at home|HOME
 
@@ -73,8 +111,9 @@ $ You die of loneliness. Don't drink alone.
 !
 
 
-This example shows the image SUN, makes Alice say  "Hello there!", waits for the user, makes Bob say "I want a beer", immediately shows the image TREES, then asks the user to go to the pub or drink at home. If they choose to drink at the pub, they are shown the picture of the pub and have a good time. The story ends there. If they chose to drink at home, they die and then the story ends.
-
-You can remove the ! at the end of a label statement and it will just carry through to the next processable statement.
-
-Dialogue can have up to 6 lines.
+This example shows the image SUN, makes Alice say  "Hello there!", waits for
+    the user, makes Bob say "I want a beer" with a typewriter effect with delay
+    of 20ms, immediately shows the image TREES, then asks the user to go to the
+    pub or drink at home. If they choose to drink at the pub, they are shown
+    the picture of the pub and have a good time. The story ends there. If they
+    chose to drink at home, they die and then the story ends.

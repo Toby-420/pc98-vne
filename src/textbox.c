@@ -1,5 +1,8 @@
 #include <string.h>
 #include <conio.h>
+#include <i86.h>
+#include <time.h>
+
 #include "textbox.h"
 #include "font.h"
 
@@ -37,25 +40,41 @@
 #define SELECT_COLOR 14
 
 
+
+static int skip_typewriter = 0;
 static char speaker[SPEAKER_MAX + 1] = "";
 static char dialogue[TEXT_MAX + 1] = "";
 
-
-void textbox_redraw_both_pages(gfx_state_t *gfx)
+// REPLACE WITH NORMAL DELAY ONCE FIXED
+static void workaround_delay(unsigned ms)
 {
-    int display;
-    int rendering;
+    volatile unsigned long i;
+    unsigned long count;
+
+    while (ms--) {
+        count = 1000UL;
+
+        for (i = 0; i < count; i++) {
+            /* Busy wait */
+        }
+    }
+}
+
+void textbox_redraw_both_pages(gfx_state_t *gfx, int typewrite_delay)
+{
+    int display, rendering, current;
 
     display = gfx_get_plane(gfx, GFX_PLANE_DISPLAY);
     rendering = gfx_get_plane(gfx, GFX_PLANE_RENDERING);
 
-    /* Draw on page 0. */
-    gfx_set_plane(gfx, GFX_PLANE_RENDERING, 0);
-    textbox_show(gfx);
+    // Draw on current plane, ignore everything but last digit
+    current = gfx_get_plane(gfx, GFX_PLANE_DISPLAY);
+    gfx_set_plane(gfx, GFX_PLANE_RENDERING, current);
+    textbox_show(gfx, typewrite_delay);
 
-    /* Draw on page 1. */
-    gfx_set_plane(gfx, GFX_PLANE_RENDERING, 1);
-    textbox_show(gfx);
+    // don't bother wasting time typewriting on renderer
+    gfx_set_plane(gfx, GFX_PLANE_RENDERING, !current);
+    textbox_show(gfx, 0);
 
     /* Restore the original rendering plane. */
     gfx_set_plane(gfx, GFX_PLANE_RENDERING, rendering);
@@ -87,11 +106,32 @@ void textbox_draw(gfx_state_t *gfx)
 }
 
 
-void textbox_show(gfx_state_t *gfx)
+static void check_typewriter_key(void)
+{
+    int key;
+
+    if (kbhit())
+    {
+        key = getch();
+
+        if (key == 13) /* Enter */
+        {
+            skip_typewriter = 1;
+        }
+        else
+        {
+            /* Preserve keys meant for other parts of the game */
+            ungetch(key);
+        }
+    }
+}
+
+
+void textbox_show(gfx_state_t *gfx, int typewrite_delay)
 {
     const char *p, *word;
     unsigned int x, y, line, word_len, line_chars, max_chars;
-
+    skip_typewriter = 0;
     textbox_draw(gfx);
 
     font_draw_string(gfx, NAME_X + 8, NAME_Y + 8, speaker, COLOR_TEXT);
@@ -127,8 +167,7 @@ void textbox_show(gfx_state_t *gfx)
         word = p;
         word_len = 0;
 
-        while (word[word_len] && word[word_len] != ' ' &&
-                word[word_len] != '\n')
+        while (word[word_len] && word[word_len] != ' ')
         {
             word_len++;
         }
@@ -153,6 +192,13 @@ void textbox_show(gfx_state_t *gfx)
             p++;
             word_len--;
             line_chars++;
+
+            if (typewrite_delay && !skip_typewriter)
+            {
+                check_typewriter_key();
+
+                if (!skip_typewriter) workaround_delay(typewrite_delay);
+            }
         }
 
         // Draw spaces
@@ -161,6 +207,13 @@ void textbox_show(gfx_state_t *gfx)
             p++;
             x += 8;
             line_chars++;
+
+            if (typewrite_delay && !skip_typewriter)
+            {
+                check_typewriter_key();
+
+                if (!skip_typewriter) workaround_delay(typewrite_delay);
+            }
         }
     }
 }
@@ -235,7 +288,7 @@ int menu_show(gfx_state_t *gfx, char *options[], int count)
         {
             int result = selected;
 
-            textbox_redraw_both_pages(gfx);
+            textbox_redraw_both_pages(gfx, 0);
 
             return result;
         }
